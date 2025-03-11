@@ -1,11 +1,39 @@
+<?php
+
+include("../includes/init.php");
+
+if (isset($_GET["supprimer"])) {
+    $stmt = $bdd->prepare("
+        DELETE FROM repas
+        WHERE id = :id
+    ");
+    $stmt->execute([
+        ":id" => $_GET["supprimer"],
+    ]);
+
+    header("location: index.php");
+}
+
+$repas = selectAll("repas", "*", "nom COLLATE NOCASE ASC");
+$page = "menu-admin";
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Zone Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
-    page temporaire
+    <?php include "../composants/header.php" ?>
+    <h1>Zone administrative</h1>
+    <div class="menu">
+      <p><a href="employes/index.php">Gestion des employés</a></p>
+      <p><a href="menu/index.php">Gestion du menu</a></p>
+    </div>
 </body>
+
 </html>
