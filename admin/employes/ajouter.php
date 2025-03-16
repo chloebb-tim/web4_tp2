@@ -4,20 +4,20 @@ include("../../includes/init.php");
 
 if (!empty($_POST)) {
     $nom = $_POST["nom"];
-    $description = $_POST["description"];
-    $prix = $_POST["prix"];
+    $prenom = $_POST["prenom"];
+    $courriel = $_POST["courriel"];
 
     $stmt = $bdd->prepare("
-    INSERT INTO repas
-        (nom, description, prix)
+    INSERT INTO utilisateurs
+        (nom, prenom, courriel)
     VALUES
-        (:nom, :description, :prix)
+        (:nom, :prenom, :courriel)
     ");
 
     $stmt->execute([
         ":nom" => $nom,
-        ":description" => $description,
-        ":prix" => $prix,
+        ":prenom" => $prenom,
+        ":courriel" => $courriel,
     ]);
 
     header("location: index.php");
@@ -42,18 +42,18 @@ $page = "menu-admin";
     <div class="menu">
         <a href="index.php" class="bouton">Retour</a>
 
-        <h2>Ajouter un item au menu</h2>
+        <h2>Ajouter un employé</h2>
         <form action="ajouter.php" method="post">
             <div class="un-repas">
                 <div>
                     <p>Nom</p>
                     <input type="text" name="nom">
 
-                    <p>Description</p>
-                    <input type="text" name="description">
+                    <p>Prénom</p>
+                    <input type="text" name="prenom">
 
-                    <p>Prix</p>
-                    <input type="text" name="prix">
+                    <p>Courriel</p>
+                    <input type="text" name="courriel">
                     
                     <p><input type="submit" value="Ajouter" class="bouton"></p>
                 </div>

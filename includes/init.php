@@ -1,6 +1,7 @@
 <?php
 
 include "bdd.php";
+session_start();
 function selectAll($nom_table, $colonnes = "*", $ordre = null) {
     global $bdd;
 

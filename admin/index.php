@@ -1,20 +1,10 @@
 <?php
 
-include("../includes/init.php");
+include "../includes/init.php";
 
-if (isset($_GET["supprimer"])) {
-    $stmt = $bdd->prepare("
-        DELETE FROM repas
-        WHERE id = :id
-    ");
-    $stmt->execute([
-        ":id" => $_GET["supprimer"],
-    ]);
-
-    header("location: index.php");
+if (!isset( $_SESSION["est_connecte"] )) {
+    header("location: connexion.php");
 }
-
-$repas = selectAll("repas", "*", "nom COLLATE NOCASE ASC");
 $page = "menu-admin";
 ?>
 <!DOCTYPE html>
@@ -31,8 +21,13 @@ $page = "menu-admin";
     <?php include "../composants/header.php" ?>
     <h1>Zone administrative</h1>
     <div class="menu">
-      <p><a href="employes/index.php">Gestion des employés</a></p>
-      <p><a href="menu/index.php">Gestion du menu</a></p>
+        <p><a href="employes/index.php">Gestion des employés</a></p>
+        <p><a href="menu/index.php">Gestion du menu</a></p>
+        <p>
+            <a href="deconnexion.php">
+                Deconnexion
+            </a>
+        </p>
     </div>
 </body>
 
