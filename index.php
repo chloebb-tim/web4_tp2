@@ -3,6 +3,8 @@
 include "includes/init.php";
 
 $repas = selectAll("repas", "*", "nom COLLATE NOCASE ASC");
+$categories = selectAll("categories","*");
+var_dump($categories);
 $page = "menu-client";
 ?>
 <!DOCTYPE html>

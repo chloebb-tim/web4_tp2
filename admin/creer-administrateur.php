@@ -2,6 +2,7 @@
 
 include("../includes/init.php");
 
+//ajouter ca a verify connexion et le mettre dans init
 if (!isset( $_SESSION["est_connecte"] )) {
     header("location: connexion.php");
 }

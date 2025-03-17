@@ -2,23 +2,36 @@
 
 include("../../includes/init.php");
 
+$categories = selectAll("categories", "*");
+
+
 if (empty($_POST)) {
     $id = $_GET["id"];
     $sql = "
-    SELECT *
-    FROM repas
-    WHERE id = :id
+    SELECT 
+        repas.*, repas_categorie.categorie_id, categories.nom as categorie_nom
+    FROM 
+        repas
+    LEFT JOIN repas_categorie 
+        ON repas.id = repas_categorie.repas_id
+    LEFT JOIN categories 
+        ON repas_categorie.categorie_id = categories.id
+    WHERE 
+        repas.id = :id
 ";
     $stmt = $bdd->prepare($sql);
     $stmt->execute([
         ":id" => $id,
     ]);
     $un_repas = $stmt->fetch();
+
 } else {
     $id = $_POST["id"];
     $nom = $_POST["nom"];
     $description = $_POST["description"];
     $prix = $_POST["prix"];
+    $categorie_id = $_POST["categorie_id"];
+
     $sql = "
     UPDATE repas
     SET 
@@ -26,7 +39,7 @@ if (empty($_POST)) {
         description = :description,
         prix = :prix
     WHERE id = :id
-";
+    ";
     $stmt = $bdd->prepare($sql);
     $stmt->execute([
         ":id" => $id,
@@ -34,7 +47,56 @@ if (empty($_POST)) {
         ":description" => $description,
         ":prix" => $prix,
     ]);
-    
+
+    $sql_check = "
+        SELECT * 
+        FROM repas_categorie 
+        WHERE repas_id = :repas_id
+    ";
+    $stmt_check = $bdd->prepare($sql_check);
+    $stmt_check->execute([":repas_id" => $id]);
+    $relation_existante = $stmt_check->fetch();
+
+    if ($categorie_id == "") {
+        $sql = "
+            DELETE FROM repas_categorie 
+            WHERE repas_id = :repas_id
+            ";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute([":repas_id" => $id]);
+
+    } else {
+
+        if ($relation_existante) {
+            $sql = "
+            UPDATE repas_categorie 
+            SET 
+                 categorie_id = :categorie_id,
+            WHERE repas_id = :repas_id
+            ";
+            $stmt = $bdd->prepare($sql);
+            $stmt->execute([
+                ":repas_id" => $id,
+                ":categorie_id" => $categorie_id
+            ]);
+        } else {
+            $sql = "
+              INSERT INTO repas_categorie
+                 (categorie_id, repas_id)
+            VALUES
+                 (:categorie_id, :repas_id)
+            ";
+            $stmt = $bdd->prepare($sql);
+            $stmt->execute([
+                ":repas_id" => $id,
+                ":categorie_id" => $categorie_id
+            ]);
+        }
+    }
+
+
+
+
     header("location: index.php");
 }
 
@@ -68,6 +130,16 @@ $page = "menu-admin";
 
                     <p>Prix</p>
                     <input type="text" name="prix" value="<?= $un_repas["prix"] ?>">
+
+                    <p>Catégorie</p>
+                    <select name="categorie_id">
+                        <option value="">-- Sélectionner une catégorie --</option>
+                        <?php foreach ($categories as $categorie): ?>
+                            <option value="<?= $categorie["id"] ?>" <?= ($categorie["id"] == $un_repas["categorie_id"]) ? "selected" : "" ?>>
+                                <?= $categorie["nom"] ?>
+                            </option>
+                        <?php endforeach ?>
+                    </select>
 
                     <p><input type="submit" class="bouton" value="Modifier"></p>
                 </div>
