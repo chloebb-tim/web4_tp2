@@ -23,6 +23,24 @@ WHERE r.nom IN (
 ) AND c.nom = 'Entrées';
 
 INSERT INTO repas (nom, description, prix) VALUES
+('Assortiment de makis et nigiris (12 morceaux), soupe miso et salade de wakame', 'Sélection du chef', 42),
+('Assortiment de sashimis (10 morceaux), soupe miso et salade de wakame', 'Sélection du chef', 48),
+('Assortiment de makis et hosomakis et nigiris (12 morceaux), soupe miso et salade de wakame', 'Sélection du chef', 34),
+('Chirashi sushi', 'Bol de riz vinaigré garni de sashimis et légumes marinés', 35),
+('Plateau Omakase (pour 2 personnes), soupe miso et salade de wakame', 'Sélection exclusive du chef', 88);
+
+INSERT INTO repas_categorie (repas_id, categorie_id)
+SELECT r.id, c.id
+FROM repas r, categories c
+WHERE r.nom IN (
+    'Assortiment de makis et nigiris (12 morceaux), soupe miso et salade de wakame',
+    'Assortiment de sashimis (10 morceaux), soupe miso et salade de wakame',
+    'Assortiment de makis et hosomakis et nigiris (12 morceaux), soupe miso et salade de wakame',
+    'Chirashi sushi',
+    'Plateau Omakase (pour 2 personnes), soupe miso et salade de wakame'
+) AND c.nom = 'Plats principaux – sushis et sashimis';
+
+INSERT INTO repas (nom, description, prix) VALUES
 ('Saumon teriyaki', 'Filet de saumon laqué, légumes sautés au shoyu, riz vapeur', 32),
 ('Bœuf wagyu grillé', 'Wagyu A5, sauce yakiniku, légumes au sésame', 48),
 ('Poulet karaage', 'Morceaux de poulet frit, mayonnaise au yuzu', 38),

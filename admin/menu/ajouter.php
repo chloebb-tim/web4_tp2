@@ -1,11 +1,14 @@
 <?php
 
 include("../../includes/init.php");
+$categories = selectAll("categories", "*");
+
 
 if (!empty($_POST)) {
     $nom = $_POST["nom"];
     $description = $_POST["description"];
     $prix = $_POST["prix"];
+    $categorie_id = $_POST["categorie_id"];
 
     $stmt = $bdd->prepare("
     INSERT INTO repas
@@ -18,6 +21,21 @@ if (!empty($_POST)) {
         ":nom" => $nom,
         ":description" => $description,
         ":prix" => $prix,
+    ]);
+    
+    // Get the ID of the newly inserted repas
+    $repas_id = $bdd->lastInsertId();
+
+    $sql = "
+    INSERT INTO repas_categorie
+        (categorie_id, repas_id)
+     VALUES
+        (:categorie_id, :repas_id)
+    ";
+    $stmt = $bdd->prepare($sql);
+    $stmt->execute([
+        ":repas_id" => $repas_id,
+        ":categorie_id" => $categorie_id
     ]);
 
     header("location: index.php");
@@ -54,7 +72,17 @@ $page = "menu-admin";
 
                     <p>Prix</p>
                     <input type="text" name="prix">
-                    
+
+                    <p>Catégorie</p>
+                    <select name="categorie_id">
+                        <option value="">-- Sélectionner une catégorie --</option>
+                        <?php foreach ($categories as $categorie): ?>
+                            <option value="<?= $categorie["id"] ?>">
+                                <?= $categorie["nom"] ?>
+                            </option>
+                        <?php endforeach ?>
+                    </select>
+
                     <p><input type="submit" value="Ajouter" class="bouton"></p>
                 </div>
             </div>

@@ -69,3 +69,8 @@ a:hover,
     background-color: brown;
     color: white;
 }
+
+.modifier-cat a{
+    border : none;
+    text-decoration: underline;
+}

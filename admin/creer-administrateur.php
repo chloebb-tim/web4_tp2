@@ -42,7 +42,7 @@ if (!empty($_POST)) {
     <h1>Création d'administrateur</h1>
 
     <form action="creer-administrateur.php" method="post">
-    <a href="index.php" class="bouton">Retour</a>
+    <a href="employes/index.php" class="bouton">Retour</a>
 
         <input name="nom" type="text" placeholder="Nom">
         <input name="prenom" type="text" placeholder="Prénom">

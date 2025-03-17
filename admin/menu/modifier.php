@@ -71,7 +71,7 @@ if (empty($_POST)) {
             $sql = "
             UPDATE repas_categorie 
             SET 
-                 categorie_id = :categorie_id,
+                 categorie_id = :categorie_id
             WHERE repas_id = :repas_id
             ";
             $stmt = $bdd->prepare($sql);

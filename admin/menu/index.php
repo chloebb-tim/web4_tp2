@@ -15,7 +15,6 @@ if (isset($_GET['categorie']) && !empty($_GET['categorie'])) {
     ";
     $stmt = $bdd->prepare($sql);
     $stmt->execute([':categorie_id' => $categorie_id]);
-    var_dump($categorie_id);
     $repas = $stmt->fetchAll();
 } else {
     // Récupérer tous les repas si aucune catégorie n'est sélectionnée
@@ -53,15 +52,16 @@ $page = "menu-admin";
         <a class="bouton" href="ajouter.php">Ajouter un item au menu</a>
         <div class="filtres">
             <h3>Filtrer par catégorie</h3>
-
+            
             <a href="index.php" class="bouton <?= !isset($_GET['categorie']) ? 'actif' : '' ?>">Tout</a>
-
+            
             <?php foreach ($categories as $categorie): ?>
                 <a href="index.php?categorie=<?= $categorie['id'] ?>"
-                    class="bouton <?= (isset($_GET['categorie']) && $_GET['categorie'] == $categorie['id']) ? 'actif' : '' ?>">
-                    <?= $categorie['id'] ?>
-                </a>
+                class="bouton <?= (isset($_GET['categorie']) && $_GET['categorie'] == $categorie['id']) ? 'actif' : '' ?>">
+                <?= $categorie['nom'] ?>
+            </a>
             <?php endforeach; ?>
+            <p class="modifier-cat"><a href="modifier-categories.php">Modifier les catégories</a></p>
         </div>
 
 
@@ -70,7 +70,7 @@ $page = "menu-admin";
                 <div>
                     <p> <?= $un_repas["nom"] ?></p>
                     <p> <?= $un_repas["description"] ?></p>
-                    <p> <?= $un_repas["prix"] ?>$</p>
+                    <p> <?= $un_repas["prix"] ?></p>
                 </div>
                 <div class="admin">
                     <a href="modifier.php?id=<?= $un_repas["id"] ?>">Modifier</a>
