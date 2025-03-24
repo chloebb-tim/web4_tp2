@@ -74,3 +74,11 @@ a:hover,
     border : none;
     text-decoration: underline;
 }
+
+a.inactif {
+    text-decoration: none;
+    opacity: 0.5;
+    pointer-events: none;
+
+    
+}
